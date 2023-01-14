@@ -1893,12 +1893,20 @@ responsive
     width: 640px;
     height: 526px;
   }
+  
+  .altxet-update{
+    width: 100%;
+  }
 
 }
 
 @media (max-width: 992px) {
   .main-banner::before {
     display: none;
+  }
+
+  .altxet-update{
+    width: 100%;
   }
 
   .subscribe .inner-content form input {
@@ -1982,6 +1990,10 @@ responsive
   .main-banner .item .down-buttons .main-blue-button {
     margin-right: 0px;
     margin-bottom: 15px;
+  }
+
+  .altxet-update{
+    width: 100%;
   }
   .main-banner .item .down-buttons .call-button a {
     margin-left: 0px;
