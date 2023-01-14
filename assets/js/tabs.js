@@ -1,32 +1,16 @@
-/*! jQuery UI - v1.11.2 - 2014-10-16
-* http://jqueryui.com
-* Includes: core.js, widget.js, mouse.js, position.js, accordion.js, autocomplete.js, button.js, datepicker.js, dialog.js, draggable.js, droppable.js, effect.js, effect-blind.js, effect-bounce.js, effect-clip.js, effect-drop.js, effect-explode.js, effect-fade.js, effect-fold.js, effect-highlight.js, effect-puff.js, effect-pulsate.js, effect-scale.js, effect-shake.js, effect-size.js, effect-slide.js, effect-transfer.js, menu.js, progressbar.js, resizable.js, selectable.js, selectmenu.js, slider.js, sortable.js, spinner.js, tabs.js, tooltip.js
-* Copyright 2014 jQuery Foundation and other contributors; Licensed MIT */
-
+/*!*/
 (function( factory ) {
 	if ( typeof define === "function" && define.amd ) {
 
-		// AMD. Register as an anonymous module.
 		define([ "jquery" ], factory );
 	} else {
 
-		// Browser globals
 		factory( jQuery );
 	}
 }(function( $ ) {
-/*!
- * jQuery UI Core 1.11.2
- * http://jqueryui.com
- *
- * Copyright 2014 jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- *
- * http://api.jqueryui.com/category/ui-core/
- */
 
 
-// $.ui might exist from components with no dependencies, e.g., $.ui.position
+
 $.ui = $.ui || {};
 
 $.extend( $.ui, {
@@ -52,7 +36,6 @@ $.extend( $.ui, {
 	}
 });
 
-// plugins
 $.fn.extend({
 	scrollParent: function( includeHidden ) {
 		var position = this.css( "position" ),
@@ -90,7 +73,6 @@ $.fn.extend({
 	}
 });
 
-// selectors
 function focusable( element, isTabIndexNotNaN ) {
 	var map, mapName, img,
 		nodeName = element.nodeName.toLowerCase();
@@ -108,7 +90,6 @@ function focusable( element, isTabIndexNotNaN ) {
 		"a" === nodeName ?
 			element.href || isTabIndexNotNaN :
 			isTabIndexNotNaN) &&
-		// the element and all of its ancestors must be visible
 		visible( element );
 }
 
@@ -126,7 +107,6 @@ $.extend( $.expr[ ":" ], {
 				return !!$.data( elem, dataName );
 			};
 		}) :
-		// support: jQuery <1.8
 		function( elem, i, match ) {
 			return !!$.data( elem, match[ 3 ] );
 		},
@@ -142,7 +122,6 @@ $.extend( $.expr[ ":" ], {
 	}
 });
 
-// support: jQuery <1.8
 if ( !$( "<a>" ).outerWidth( 1 ).jquery ) {
 	$.each( [ "Width", "Height" ], function( i, name ) {
 		var side = name === "Width" ? [ "Left", "Right" ] : [ "Top", "Bottom" ],
@@ -189,7 +168,6 @@ if ( !$( "<a>" ).outerWidth( 1 ).jquery ) {
 	});
 }
 
-// support: jQuery <1.8
 if ( !$.fn.addBack ) {
 	$.fn.addBack = function( selector ) {
 		return this.add( selector == null ?
@@ -198,7 +176,6 @@ if ( !$.fn.addBack ) {
 	};
 }
 
-// support: jQuery 1.6.1, 1.6.2 (http://bugs.jquery.com/ticket/9413)
 if ( $( "<a>" ).data( "a-b", "a" ).removeData( "a-b" ).data( "a-b" ) ) {
 	$.fn.removeData = (function( removeData ) {
 		return function( key ) {
@@ -211,7 +188,6 @@ if ( $( "<a>" ).data( "a-b", "a" ).removeData( "a-b" ).data( "a-b" ) ) {
 	})( $.fn.removeData );
 }
 
-// deprecated
 $.ui.ie = !!/msie [\w.]+/.exec( navigator.userAgent.toLowerCase() );
 
 $.fn.extend({
@@ -255,15 +231,10 @@ $.fn.extend({
 		if ( this.length ) {
 			var elem = $( this[ 0 ] ), position, value;
 			while ( elem.length && elem[ 0 ] !== document ) {
-				// Ignore z-index if position is set to a value where z-index is ignored by the browser
-				// This makes behavior of this function consistent across browsers
-				// WebKit always returns auto if the element is positioned
+
 				position = elem.css( "position" );
 				if ( position === "absolute" || position === "relative" || position === "fixed" ) {
-					// IE returns 0 when zIndex is not specified
-					// other browsers return a string
-					// we ignore the case of nested elements with an explicit value of 0
-					// <div style="z-index: -10;"><div style="z-index: 0;"></div></div>
+
 					value = parseInt( elem.css( "zIndex" ), 10 );
 					if ( !isNaN( value ) && value !== 0 ) {
 						return value;
@@ -277,7 +248,6 @@ $.fn.extend({
 	}
 });
 
-// $.ui.plugin is deprecated. Use $.widget() extensions instead.
 $.ui.plugin = {
 	add: function( module, option, set ) {
 		var i,
@@ -308,16 +278,7 @@ $.ui.plugin = {
 };
 
 
-/*!
- * jQuery UI Widget 1.11.2
- * http://jqueryui.com
- *
- * Copyright 2014 jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- *
- * http://api.jqueryui.com/jQuery.widget/
- */
+
 
 
 var widget_uuid = 0,
@@ -329,13 +290,11 @@ $.cleanData = (function( orig ) {
 		for ( i = 0; (elem = elems[i]) != null; i++ ) {
 			try {
 
-				// Only trigger remove when necessary to save time
 				events = $._data( elem, "events" );
 				if ( events && events.remove ) {
 					$( elem ).triggerHandler( "remove" );
 				}
 
-			// http://bugs.jquery.com/ticket/8235
 			} catch ( e ) {}
 		}
 		orig( elems );
@@ -344,8 +303,7 @@ $.cleanData = (function( orig ) {
 
 $.widget = function( name, base, prototype ) {
 	var fullName, existingConstructor, constructor, basePrototype,
-		// proxiedPrototype allows the provided prototype to remain unmodified
-		// so that it can be used as a mixin for multiple widgets (#8876)
+
 		proxiedPrototype = {},
 		namespace = name.split( "." )[ 0 ];
 
@@ -357,7 +315,6 @@ $.widget = function( name, base, prototype ) {
 		base = $.Widget;
 	}
 
-	// create selector for plugin
 	$.expr[ ":" ][ fullName.toLowerCase() ] = function( elem ) {
 		return !!$.data( elem, fullName );
 	};
@@ -365,32 +322,22 @@ $.widget = function( name, base, prototype ) {
 	$[ namespace ] = $[ namespace ] || {};
 	existingConstructor = $[ namespace ][ name ];
 	constructor = $[ namespace ][ name ] = function( options, element ) {
-		// allow instantiation without "new" keyword
 		if ( !this._createWidget ) {
 			return new constructor( options, element );
 		}
 
-		// allow instantiation without initializing for simple inheritance
-		// must use "new" keyword (the code above always passes args)
 		if ( arguments.length ) {
 			this._createWidget( options, element );
 		}
 	};
-	// extend with the existing constructor to carry over any static properties
 	$.extend( constructor, existingConstructor, {
 		version: prototype.version,
-		// copy the object used to create the prototype in case we need to
-		// redefine the widget later
 		_proto: $.extend( {}, prototype ),
-		// track widgets that inherit from this widget in case this widget is
-		// redefined after a widget inherits from it
 		_childConstructors: []
 	});
 
 	basePrototype = new base();
-	// we need to make the options hash a property directly on the new instance
-	// otherwise we'll modify the options hash on the prototype that we're
-	// inheriting from
+
 	basePrototype.options = $.widget.extend( {}, basePrototype.options );
 	$.each( prototype, function( prop, value ) {
 		if ( !$.isFunction( value ) ) {
@@ -422,9 +369,8 @@ $.widget = function( name, base, prototype ) {
 		})();
 	});
 	constructor.prototype = $.widget.extend( basePrototype, {
-		// TODO: remove support for widgetEventPrefix
-		// always use the name + a colon as the prefix, e.g., draggable:start
-		// don't prefix for widgets that aren't DOM-based
+
+
 		widgetEventPrefix: existingConstructor ? (basePrototype.widgetEventPrefix || name) : name
 	}, proxiedPrototype, {
 		constructor: constructor,
@@ -433,20 +379,14 @@ $.widget = function( name, base, prototype ) {
 		widgetFullName: fullName
 	});
 
-	// If this widget is being redefined then we need to find all widgets that
-	// are inheriting from it and redefine all of them so that they inherit from
-	// the new version of this widget. We're essentially trying to replace one
-	// level in the prototype chain.
+
 	if ( existingConstructor ) {
 		$.each( existingConstructor._childConstructors, function( i, child ) {
 			var childPrototype = child.prototype;
 
-			// redefine the child widget using the same prototype that was
-			// originally used, but inherit from the new version of the base
 			$.widget( childPrototype.namespace + "." + childPrototype.widgetName, constructor, child._proto );
 		});
-		// remove the list of existing child constructors from the old constructor
-		// so the old child constructors can be garbage collected
+
 		delete existingConstructor._childConstructors;
 	} else {
 		base._childConstructors.push( constructor );
@@ -467,13 +407,10 @@ $.widget.extend = function( target ) {
 		for ( key in input[ inputIndex ] ) {
 			value = input[ inputIndex ][ key ];
 			if ( input[ inputIndex ].hasOwnProperty( key ) && value !== undefined ) {
-				// Clone objects
 				if ( $.isPlainObject( value ) ) {
 					target[ key ] = $.isPlainObject( target[ key ] ) ?
 						$.widget.extend( {}, target[ key ], value ) :
-						// Don't extend strings, arrays, etc. with objects
 						$.widget.extend( {}, value );
-				// Copy everything else by reference
 				} else {
 					target[ key ] = value;
 				}
@@ -490,7 +427,6 @@ $.widget.bridge = function( name, object ) {
 			args = widget_slice.call( arguments, 1 ),
 			returnValue = this;
 
-		// allow multiple hashes to be passed on init
 		options = !isMethodCall && args.length ?
 			$.widget.extend.apply( null, [ options ].concat(args) ) :
 			options;
@@ -536,7 +472,7 @@ $.widget.bridge = function( name, object ) {
 	};
 };
 
-$.Widget = function( /* options, element */ ) {};
+$.Widget = function(  ) {};
 $.Widget._childConstructors = [];
 
 $.Widget.prototype = {
@@ -546,7 +482,6 @@ $.Widget.prototype = {
 	options: {
 		disabled: false,
 
-		// callbacks
 		create: null
 	},
 	_createWidget: function( options, element ) {
@@ -569,9 +504,7 @@ $.Widget.prototype = {
 				}
 			});
 			this.document = $( element.style ?
-				// element within the document
 				element.ownerDocument :
-				// element is window or document
 				element.document || element );
 			this.window = $( this.document[0].defaultView || this.document[0].parentWindow );
 		}
@@ -592,13 +525,10 @@ $.Widget.prototype = {
 
 	destroy: function() {
 		this._destroy();
-		// we can probably remove the unbind calls in 2.0
-		// all event bindings should go through this._on()
 		this.element
 			.unbind( this.eventNamespace )
 			.removeData( this.widgetFullName )
-			// support: jquery <1.6.3
-			// http://bugs.jquery.com/ticket/9413
+			
 			.removeData( $.camelCase( this.widgetFullName ) );
 		this.widget()
 			.unbind( this.eventNamespace )
@@ -607,7 +537,6 @@ $.Widget.prototype = {
 				this.widgetFullName + "-disabled " +
 				"ui-state-disabled" );
 
-		// clean up events and states
 		this.bindings.unbind( this.eventNamespace );
 		this.hoverable.removeClass( "ui-state-hover" );
 		this.focusable.removeClass( "ui-state-focus" );
@@ -625,12 +554,10 @@ $.Widget.prototype = {
 			i;
 
 		if ( arguments.length === 0 ) {
-			// don't return a reference to the internal hash
 			return $.widget.extend( {}, this.options );
 		}
 
 		if ( typeof key === "string" ) {
-			// handle nested keys, e.g., "foo.bar" => { foo: { bar: ___ } }
 			options = {};
 			parts = key.split( "." );
 			key = parts.shift();
@@ -673,7 +600,6 @@ $.Widget.prototype = {
 			this.widget()
 				.toggleClass( this.widgetFullName + "-disabled", !!value );
 
-			// If the widget is becoming disabled, then nothing is interactive
 			if ( value ) {
 				this.hoverable.removeClass( "ui-state-hover" );
 				this.focusable.removeClass( "ui-state-focus" );
@@ -694,14 +620,12 @@ $.Widget.prototype = {
 		var delegateElement,
 			instance = this;
 
-		// no suppressDisabledCheck flag, shuffle arguments
 		if ( typeof suppressDisabledCheck !== "boolean" ) {
 			handlers = element;
 			element = suppressDisabledCheck;
 			suppressDisabledCheck = false;
 		}
 
-		// no element argument, shuffle and use this.element
 		if ( !handlers ) {
 			handlers = element;
 			element = this.element;
@@ -713,9 +637,7 @@ $.Widget.prototype = {
 
 		$.each( handlers, function( event, handler ) {
 			function handlerProxy() {
-				// allow widgets to customize the disabled handling
-				// - disabled as an array instead of boolean
-				// - disabled class as method for disabling individual parts
+				
 				if ( !suppressDisabledCheck &&
 						( instance.options.disabled === true ||
 							$( this ).hasClass( "ui-state-disabled" ) ) ) {
@@ -725,7 +647,6 @@ $.Widget.prototype = {
 					.apply( instance, arguments );
 			}
 
-			// copy the guid so direct unbinding works
 			if ( typeof handler !== "string" ) {
 				handlerProxy.guid = handler.guid =
 					handler.guid || handlerProxy.guid || $.guid++;
@@ -747,7 +668,6 @@ $.Widget.prototype = {
 			this.eventNamespace;
 		element.unbind( eventName ).undelegate( eventName );
 
-		// Clear the stack to avoid memory leaks (#10056)
 		this.bindings = $( this.bindings.not( element ).get() );
 		this.focusable = $( this.focusable.not( element ).get() );
 		this.hoverable = $( this.hoverable.not( element ).get() );
@@ -795,11 +715,9 @@ $.Widget.prototype = {
 		event.type = ( type === this.widgetEventPrefix ?
 			type :
 			this.widgetEventPrefix + type ).toLowerCase();
-		// the original event may come from any element
-		// so we need to reset the target on the new event
+		
 		event.target = this.element[ 0 ];
 
-		// copy original event properties over to the new event
 		orig = event.originalEvent;
 		if ( orig ) {
 			for ( prop in orig ) {
@@ -855,16 +773,7 @@ $.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
 var widget = $.widget;
 
 
-/*!
- * jQuery UI Mouse 1.11.2
- * http://jqueryui.com
- *
- * Copyright 2014 jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- *
- * http://api.jqueryui.com/mouse/
- */
+
 
 
 var mouseHandled = false;
@@ -897,8 +806,7 @@ var mouse = $.widget("ui.mouse", {
 		this.started = false;
 	},
 
-	// TODO: make sure destroying one instance of mouse doesn't mess with
-	// other instances of mouse
+	
 	_mouseDestroy: function() {
 		this.element.unbind("." + this.widgetName);
 		if ( this._mouseMoveDelegate ) {
@@ -909,22 +817,19 @@ var mouse = $.widget("ui.mouse", {
 	},
 
 	_mouseDown: function(event) {
-		// don't let more than one widget handle mouseStart
 		if ( mouseHandled ) {
 			return;
 		}
 
 		this._mouseMoved = false;
 
-		// we may have missed mouseup (out of window)
 		(this._mouseStarted && this._mouseUp(event));
 
 		this._mouseDownEvent = event;
 
 		var that = this,
 			btnIsLeft = (event.which === 1),
-			// event.target.nodeName works around a bug in IE 8 with
-			// disabled inputs (#7620)
+			
 			elIsCancel = (typeof this.options.cancel === "string" && event.target.nodeName ? $(event.target).closest(this.options.cancel).length : false);
 		if (!btnIsLeft || elIsCancel || !this._mouseCapture(event)) {
 			return true;
@@ -945,12 +850,10 @@ var mouse = $.widget("ui.mouse", {
 			}
 		}
 
-		// Click event may never have fired (Gecko & Opera)
 		if (true === $.data(event.target, this.widgetName + ".preventClickEvent")) {
 			$.removeData(event.target, this.widgetName + ".preventClickEvent");
 		}
 
-		// these delegates are required to keep context
 		this._mouseMoveDelegate = function(event) {
 			return that._mouseMove(event);
 		};
@@ -969,16 +872,11 @@ var mouse = $.widget("ui.mouse", {
 	},
 
 	_mouseMove: function(event) {
-		// Only check for mouseups outside the document if you've moved inside the document
-		// at least once. This prevents the firing of mouseup in the case of IE<9, which will
-		// fire a mousemove event if content is placed under the cursor. See #7778
-		// Support: IE <9
+
 		if ( this._mouseMoved ) {
-			// IE mouseup check - mouseup happened when mouse was out of window
 			if ($.ui.ie && ( !document.documentMode || document.documentMode < 9 ) && !event.button) {
 				return this._mouseUp(event);
 
-			// Iframe mouseup check - mouseup occurred in another document
 			} else if ( !event.which ) {
 				return this._mouseUp( event );
 			}
