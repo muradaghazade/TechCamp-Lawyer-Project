@@ -2,7 +2,6 @@
 	
 	"use strict";
 
-	// Header Type = Fixed
   $(window).scroll(function() {
     var scroll = $(window).scrollTop();
     var box = $('.header-text').height();
@@ -87,7 +86,7 @@
 
     
 
-	// Menu Dropdown Toggle
+	// Menyu  Dəyişdirici
   if($('.menu-trigger').length){
     $(".menu-trigger").on('click', function() { 
       $(this).toggleClass('active');
@@ -96,7 +95,7 @@
   }
 
 
-  // Menu elevator animation
+  // Menyu lift animasiya
   $('.scroll-to-section a[href*=\\#]:not([href=\\#])').on('click', function() {
     if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
       var target = $(this.hash);
@@ -118,7 +117,7 @@
   $(document).ready(function () {
       $(document).on("scroll", onScroll);
       
-      //smoothscroll
+      // sürüşdürün
       $('.scroll-to-section a[href^="#"]').on('click', function (e) {
           e.preventDefault();
           $(document).off("scroll");
@@ -157,7 +156,7 @@
 
 
 
-	// Page loading animation
+	// Səhifə yükləmə animasiyası
 	 $(window).on('load', function() {
 
         $('#js-preloader').addClass('loaded');
@@ -166,7 +165,7 @@
 
 	
 
-	// Window Resize Mobile Menu Fix
+	// Pəncərə Ölçüsü Mobil Menyu Düzəltmə
   function mobileNav() {
     var width = $(window).width();
     $('.submenu').on('click', function() {
