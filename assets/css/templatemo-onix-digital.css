@@ -161,7 +161,7 @@ body {
 }
 
 .section-heading h2 span {
-  color: #ff695f;
+  color: black;
   font-weight: 700;
   opacity: 1;
   text-transform: capitalize;
@@ -1410,11 +1410,12 @@ Subscribe kodu
 .subscribe .inner-content form input {
   width: 78%;
   margin-top: 20px;
+  border-radius: 40px;
   line-height: 40px;
   background-color: transparent;
   border: none;
   outline: none;
-  padding: 0px 20px;
+  padding: 0px 100px;
   font-size: 15px;
   color: #2a2a2a;
 }
