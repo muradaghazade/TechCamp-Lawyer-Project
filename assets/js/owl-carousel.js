@@ -1,136 +1,101 @@
-/**
- * Owl Carousel v2.3.4
- * Copyright 2013-2018 David Deutsch
- * Licensed under: SEE LICENSE IN https://github.com/OwlCarousel2/OwlCarousel2/blob/master/LICENSE
- */
-/**
- * Owl carousel
- * @version 2.3.4
- * @author Bartosz Wojciechowski
- * @author David Deutsch
- * @license The MIT License (MIT)
- * @todo Lazy Load Icon
- * @todo prevent animationend bubling
- * @todo itemsScaleUp
- * @todo Test Zepto
- * @todo stagePadding calculate wrong active classes
- */
+
 ;(function($, window, document, undefined) {
 
 	/**
-	 * Creates a carousel.
-	 * @class The Owl Carousel.
+	 * @class 
 	 * @public
-	 * @param {HTMLElement|jQuery} element - The element to create the carousel for.
-	 * @param {Object} [options] - The options
+	 * @param {HTMLElement|jQuery} 
+	 * @param {Object} [options] 
 	 */
 	function Owl(element, options) {
 
 		/**
-		 * Current settings for the carousel.
 		 * @public
 		 */
 		this.settings = null;
 
 		/**
-		 * Current options set by the caller including defaults.
 		 * @public
 		 */
 		this.options = $.extend({}, Owl.Defaults, options);
 
 		/**
-		 * Plugin element.
 		 * @public
 		 */
 		this.$element = $(element);
 
 		/**
-		 * Proxied event handlers.
 		 * @protected
 		 */
 		this._handlers = {};
 
 		/**
-		 * References to the running plugins of this carousel.
 		 * @protected
 		 */
 		this._plugins = {};
 
 		/**
-		 * Currently suppressed events to prevent them from being retriggered.
 		 * @protected
 		 */
 		this._supress = {};
 
 		/**
-		 * Absolute current position.
 		 * @protected
 		 */
 		this._current = null;
 
 		/**
-		 * Animation speed in milliseconds.
 		 * @protected
 		 */
 		this._speed = null;
 
 		/**
-		 * Coordinates of all items in pixel.
-		 * @todo The name of this member is missleading.
+		 * @todo 
 		 * @protected
 		 */
 		this._coordinates = [];
 
 		/**
-		 * Current breakpoint.
-		 * @todo Real media queries would be nice.
+		 * @todo 
 		 * @protected
 		 */
 		this._breakpoint = null;
 
 		/**
-		 * Current width of the plugin element.
 		 */
 		this._width = null;
 
 		/**
-		 * All real items.
 		 * @protected
 		 */
 		this._items = [];
 
 		/**
-		 * All cloned items.
 		 * @protected
 		 */
 		this._clones = [];
 
 		/**
-		 * Merge values of all items.
-		 * @todo Maybe this could be part of a plugin.
+		 * @todo 
 		 * @protected
 		 */
 		this._mergers = [];
 
 		/**
-		 * Widths of all items.
 		 */
 		this._widths = [];
 
 		/**
-		 * Invalidated parts within the update process.
 		 * @protected
 		 */
 		this._invalidated = {};
 
 		/**
-		 * Ordered list of workers for the update process.
 		 * @protected
 		 */
 		this._pipe = [];
 
 		/**
-		 * Current state information for the drag operation.
 		 * @todo #261
 		 * @protected
 		 */
@@ -146,7 +111,6 @@
 		};
 
 		/**
-		 * Current state information and their tags.
 		 * @type {Object}
 		 * @protected
 		 */
@@ -180,7 +144,6 @@
 	}
 
 	/**
-	 * Default options for the carousel.
 	 * @public
 	 */
 	Owl.Defaults = {
@@ -235,7 +198,6 @@
 	};
 
 	/**
-	 * Enumeration for width.
 	 * @public
 	 * @readonly
 	 * @enum {String}
@@ -247,7 +209,6 @@
 	};
 
 	/**
-	 * Enumeration for types.
 	 * @public
 	 * @readonly
 	 * @enum {String}
@@ -258,13 +219,11 @@
 	};
 
 	/**
-	 * Contains all registered plugins.
 	 * @public
 	 */
 	Owl.Plugins = {};
 
 	/**
-	 * List of workers involved in the update process.
 	 */
 	Owl.Workers = [ {
 		filter: [ 'width', 'settings' ],
@@ -328,7 +287,6 @@
 			var clones = [],
 				items = this._items,
 				settings = this.settings,
-				// TODO: Should be computed from number of min width items in stage
 				view = Math.max(settings.items * 2, 4),
 				size = Math.ceil(items.length / 2) * 2,
 				repeat = settings.loop && items.length ? settings.rewind ? view : Math.max(view, size) : 0,
@@ -338,7 +296,6 @@
 			repeat /= 2;
 
 			while (repeat > 0) {
-				// Switch to only using appended clones
 				clones.push(this.normalize(clones.length / 2, true));
 				append = append + items[clones[clones.length - 1]][0].outerHTML;
 				clones.push(this.normalize(items.length - 1 - (clones.length - 1) / 2, true));
@@ -446,36 +403,30 @@
 	} ];
 
 	/**
-	 * Create the stage DOM element
 	 */
 	Owl.prototype.initializeStage = function() {
 		this.$stage = this.$element.find('.' + this.settings.stageClass);
 
-		// if the stage is already in the DOM, grab it and skip stage initialization
 		if (this.$stage.length) {
 			return;
 		}
 
 		this.$element.addClass(this.options.loadingClass);
 
-		// create stage
 		this.$stage = $('<' + this.settings.stageElement + '>', {
 			"class": this.settings.stageClass
 		}).wrap( $( '<div/>', {
 			"class": this.settings.stageOuterClass
 		}));
 
-		// append stage
 		this.$element.append(this.$stage.parent());
 	};
 
 	/**
-	 * Create item DOM elements
 	 */
 	Owl.prototype.initializeItems = function() {
 		var $items = this.$element.find('.owl-item');
 
-		// if the items are already in the DOM, grab them and skip item initialization
 		if ($items.length) {
 			this._items = $items.get().map(function(item) {
 				return $(item);
@@ -490,15 +441,11 @@
 			return;
 		}
 
-		// append content
 		this.replace(this.$element.children().not(this.$stage.parent()));
 
-		// check visibility
 		if (this.isVisible()) {
-			// update view
 			this.refresh();
 		} else {
-			// invalidate width
 			this.invalidate('width');
 		}
 
@@ -508,7 +455,6 @@
 	};
 
 	/**
-	 * Initializes the carousel.
 	 * @protected
 	 */
 	Owl.prototype.initialize = function() {
@@ -531,7 +477,6 @@
 		this.initializeStage();
 		this.initializeItems();
 
-		// register event handlers
 		this.registerEventHandlers();
 
 		this.leave('initializing');
@@ -539,9 +484,7 @@
 	};
 
 	/**
-	 * @returns {Boolean} visibility of $element
-	 *                    if you know the carousel will always be visible you can set `checkVisibility` to `false` to
-	 *                    prevent the expensive browser layout forced reflow the $element.is(':visible') does
+	 * @returns {Boolean}
 	 */
 	Owl.prototype.isVisible = function() {
 		return this.settings.checkVisibility
@@ -550,9 +493,8 @@
 	};
 
 	/**
-	 * Setups the current settings.
-	 * @todo Remove responsive classes. Why should adaptive designs be brought into IE8?
-	 * @todo Support for media queries by using `matchMedia` would be nice.
+	 * @todo 
+	 * @todo 
 	 * @public
 	 */
 	Owl.prototype.setup = function() {
@@ -576,7 +518,6 @@
 			}
 			delete settings.responsive;
 
-			// responsive class
 			if (settings.responsiveClass) {
 				this.$element.attr('class',
 					this.$element.attr('class').replace(new RegExp('(' + this.options.responsiveClass + '-)\\S+\\s', 'g'), '$1' + match)
@@ -592,7 +533,6 @@
 	};
 
 	/**
-	 * Updates option logic if necessery.
 	 * @protected
 	 */
 	Owl.prototype.optionsLogic = function() {
@@ -603,10 +543,9 @@
 	};
 
 	/**
-	 * Prepares an item before add.
-	 * @todo Rename event parameter `content` to `item`.
+	 * @todo 
 	 * @protected
-	 * @returns {jQuery|HTMLElement} - The item container.
+	 * @returns {jQuery|HTMLElement} 
 	 */
 	Owl.prototype.prepare = function(item) {
 		var event = this.trigger('prepare', { content: item });
@@ -622,7 +561,6 @@
 	};
 
 	/**
-	 * Updates the view.
 	 * @public
 	 */
 	Owl.prototype.update = function() {
@@ -644,10 +582,9 @@
 	};
 
 	/**
-	 * Gets the width of the view.
 	 * @public
-	 * @param {Owl.Width} [dimension=Owl.Width.Default] - The dimension to return.
-	 * @returns {Number} - The width of the view in pixel.
+	 * @param {Owl.Width} [dimension=Owl.Width.Default] 
+	 * @returns {Number}
 	 */
 	Owl.prototype.width = function(dimension) {
 		dimension = dimension || Owl.Width.Default;
@@ -661,7 +598,6 @@
 	};
 
 	/**
-	 * Refreshes the carousel primarily for adaptive purposes.
 	 * @public
 	 */
 	Owl.prototype.refresh = function() {
@@ -683,7 +619,6 @@
 	};
 
 	/**
-	 * Checks window `resize` event.
 	 * @protected
 	 */
 	Owl.prototype.onThrottledResize = function() {
@@ -692,7 +627,6 @@
 	};
 
 	/**
-	 * Checks window `resize` event.
 	 * @protected
 	 */
 	Owl.prototype.onResize = function() {
@@ -724,8 +658,7 @@
 	};
 
 	/**
-	 * Registers event handlers.
-	 * @todo Check `msPointerEnabled`
+	 * @todo 
 	 * @todo #261
 	 * @protected
 	 */
@@ -751,11 +684,10 @@
 	};
 
 	/**
-	 * Handles `touchstart` and `mousedown` events.
-	 * @todo Horizontal swipe threshold as option
+	 * @todo 
 	 * @todo #261
 	 * @protected
-	 * @param {Event} event - The event arguments.
+	 * @param {Event} 
 	 */
 	Owl.prototype.onDragStart = function(event) {
 		var stage = null;
@@ -814,10 +746,9 @@
 	};
 
 	/**
-	 * Handles the `touchmove` and `mousemove` events.
 	 * @todo #261
 	 * @protected
-	 * @param {Event} event - The event arguments.
+	 * @param {Event} 
 	 */
 	Owl.prototype.onDragMove = function(event) {
 		var minimum = null,
@@ -849,11 +780,10 @@
 	};
 
 	/**
-	 * Handles the `touchend` and `mouseup` events.
 	 * @todo #261
-	 * @todo Threshold for click event
+	 * @todo 
 	 * @protected
-	 * @param {Event} event - The event arguments.
+	 * @param {Event} 
 	 */
 	Owl.prototype.onDragEnd = function(event) {
 		var delta = this.difference(this._drag.pointer, this.pointer(event)),
@@ -886,12 +816,11 @@
 	};
 
 	/**
-	 * Gets absolute position of the closest item for a coordinate.
-	 * @todo Setting `freeDrag` makes `closest` not reusable. See #165.
+	 * @todo 
 	 * @protected
-	 * @param {Number} coordinate - The coordinate in pixel.
-	 * @param {String} direction - The direction to check for the closest item. Ether `left` or `right`.
-	 * @return {Number} - The absolute position of the closest item.
+	 * @param {Number} 
+	 * @param {String} 
+	 * @return {Number} 
 	 */
 	Owl.prototype.closest = function(coordinate, direction) {
 		var position = -1,
@@ -900,13 +829,9 @@
 			coordinates = this.coordinates();
 
 		if (!this.settings.freeDrag) {
-			// check closest item
 			$.each(coordinates, $.proxy(function(index, value) {
-				// on a left pull, check on current index
 				if (direction === 'left' && coordinate > value - pull && coordinate < value + pull) {
 					position = index;
-				// on a right pull, check on previous index
-				// to do so, subtract width from value and set position = index + 1
 				} else if (direction === 'right' && coordinate > value - width - pull && coordinate < value - width + pull) {
 					position = index + 1;
 				} else if (this.op(coordinate, '<', value)
@@ -918,7 +843,6 @@
 		}
 
 		if (!this.settings.loop) {
-			// non loop boundries
 			if (this.op(coordinate, '>', coordinates[this.minimum()])) {
 				position = coordinate = this.minimum();
 			} else if (this.op(coordinate, '<', coordinates[this.maximum()])) {
@@ -930,10 +854,9 @@
 	};
 
 	/**
-	 * Animates the stage.
 	 * @todo #270
 	 * @public
-	 * @param {Number} coordinate - The coordinate in pixels.
+	 * @param {Number} 
 	 */
 	Owl.prototype.animate = function(coordinate) {
 		var animate = this.speed() > 0;
@@ -964,19 +887,17 @@
 	};
 
 	/**
-	 * Checks whether the carousel is in a specific state or not.
-	 * @param {String} state - The state to check.
-	 * @returns {Boolean} - The flag which indicates if the carousel is busy.
+	 * @param {String} 
+	 * @returns {Boolean} 
 	 */
 	Owl.prototype.is = function(state) {
 		return this._states.current[state] && this._states.current[state] > 0;
 	};
 
 	/**
-	 * Sets the absolute position of the current item.
 	 * @public
-	 * @param {Number} [position] - The new absolute position or nothing to leave it unchanged.
-	 * @returns {Number} - The absolute position of the current item.
+	 * @param {Number} [position] 
+	 * @returns {Number}
 	 */
 	Owl.prototype.current = function(position) {
 		if (position === undefined) {
